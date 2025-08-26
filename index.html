@@ -1,1 +1,1999 @@
-<!-- Content of guide.html goes here -->
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0" />
+		<title>FetchService: The Ultimate Guide</title>
+		<link
+			rel="preconnect"
+			href="https://fonts.googleapis.com" />
+		<link
+			rel="preconnect"
+			href="https://fonts.gstatic.com"
+			crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap"
+			rel="stylesheet" />
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+
+			:root {
+				--primary: #7c3aed;
+				--primary-light: #a78bfa;
+				--primary-dark: #6d28d9;
+				--accent: #06b6d4;
+				--accent-light: #67e8f9;
+				--success: #10b981;
+				--warning: #f59e0b;
+				--danger: #ef4444;
+				--dark: #0f172a;
+				--medium: #334155;
+				--light: #f8fafc;
+				--white: #ffffff;
+				--gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+				--gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+				--gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+				--gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+				--code-bg: #1e1e2e;
+				--code-text: #cdd6f4;
+				--code-keyword: #f38ba8;
+				--code-string: #a6e3a1;
+				--code-function: #fab387;
+				--code-comment: #6c7086;
+				--code-number: #89dceb;
+				--code-decorator: #f9e2af;
+				--max-width: 1400px;
+			}
+
+			body {
+				font-family: 'Inter', -apple-system, BlinkMacSystemFont,
+					sans-serif;
+				background: var(--dark);
+				min-height: 100vh;
+				overflow-x: hidden;
+				position: relative;
+			}
+
+			/* Animated background */
+			body::before {
+				content: '';
+				position: fixed;
+				width: 200%;
+				height: 200%;
+				top: -50%;
+				left: -50%;
+				background: radial-gradient(
+						circle at 20% 30%,
+						var(--primary-dark) 0%,
+						transparent 50%
+					),
+					radial-gradient(
+						circle at 80% 80%,
+						var(--accent) 0%,
+						transparent 50%
+					),
+					radial-gradient(
+						circle at 40% 60%,
+						var(--primary) 0%,
+						transparent 50%
+					);
+				animation: bgAnimation 20s ease infinite;
+				opacity: 0.15;
+				z-index: -1;
+			}
+
+			@keyframes bgAnimation {
+				0%,
+				100% {
+					transform: rotate(0deg) scale(1);
+				}
+				25% {
+					transform: rotate(90deg) scale(1.1);
+				}
+				50% {
+					transform: rotate(180deg) scale(1);
+				}
+				75% {
+					transform: rotate(270deg) scale(1.1);
+				}
+			}
+
+			.floating-particles {
+				position: fixed;
+				width: 100%;
+				height: 100%;
+				pointer-events: none;
+				z-index: -1;
+			}
+
+			.particle {
+				position: absolute;
+				width: 4px;
+				height: 4px;
+				background: var(--accent-light);
+				border-radius: 50%;
+				animation: float 15s infinite;
+				opacity: 0;
+			}
+
+			@keyframes float {
+				0% {
+					transform: translateY(100vh) scale(0);
+					opacity: 0;
+				}
+				10% {
+					opacity: 1;
+				}
+				90% {
+					opacity: 1;
+				}
+				100% {
+					transform: translateY(-100vh) scale(1);
+					opacity: 0;
+				}
+			}
+
+			.container {
+				max-width: var(--max-width);
+				margin: 0 auto;
+				position: relative;
+				z-index: 1;
+			}
+
+			/* Glassmorphic Header */
+			.header {
+				background: rgba(255, 255, 255, 0.05);
+				backdrop-filter: blur(20px);
+				-webkit-backdrop-filter: blur(20px);
+				border: 1px solid rgba(255, 255, 255, 0.1);
+				padding: 60px 40px 40px;
+				position: relative;
+				overflow: hidden;
+				border-radius: 0 0 30px 30px;
+				box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+			}
+
+			.header::before {
+				content: '';
+				position: absolute;
+				width: 600px;
+				height: 600px;
+				background: var(--gradient-1);
+				border-radius: 50%;
+				top: -300px;
+				right: -300px;
+				opacity: 0.3;
+				animation: pulse 4s ease-in-out infinite;
+			}
+
+			@keyframes pulse {
+				0%,
+				100% {
+					transform: scale(1);
+					opacity: 0.3;
+				}
+				50% {
+					transform: scale(1.1);
+					opacity: 0.5;
+				}
+			}
+
+			h1 {
+				font-size: 4em;
+				font-weight: 900;
+				background: linear-gradient(
+					135deg,
+					#fff 0%,
+					var(--accent-light) 50%,
+					var(--primary-light) 100%
+				);
+				-webkit-background-clip: text;
+				-webkit-text-fill-color: transparent;
+				background-clip: text;
+				margin-bottom: 20px;
+				position: relative;
+				z-index: 1;
+				animation: glow 3s ease-in-out infinite;
+			}
+
+			@keyframes glow {
+				0%,
+				100% {
+					filter: brightness(1);
+				}
+				50% {
+					filter: brightness(1.2);
+				}
+			}
+
+			.subtitle {
+				font-size: 1.3em;
+				color: rgba(255, 255, 255, 0.8);
+				margin-bottom: 40px;
+				position: relative;
+				z-index: 1;
+			}
+
+			/* Futuristic Navigation */
+			.nav-tabs {
+				display: flex;
+				gap: 15px;
+				flex-wrap: wrap;
+				position: relative;
+				z-index: 1;
+			}
+
+			.nav-tab {
+				padding: 12px 24px;
+				background: rgba(255, 255, 255, 0.05);
+				border: 1px solid rgba(255, 255, 255, 0.1);
+				border-radius: 50px;
+				color: rgba(255, 255, 255, 0.8);
+				cursor: pointer;
+				transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+				font-weight: 600;
+				position: relative;
+				overflow: hidden;
+			}
+
+			.nav-tab::before {
+				content: '';
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				background: var(--gradient-3);
+				top: 0;
+				left: -100%;
+				transition: left 0.4s ease;
+				z-index: -1;
+			}
+
+			.nav-tab:hover {
+				transform: translateY(-3px) scale(1.05);
+				box-shadow: 0 10px 30px -5px rgba(124, 58, 237, 0.5);
+				color: white;
+			}
+
+			.nav-tab:hover::before {
+				left: 0;
+			}
+
+			.nav-tab.active {
+				background: var(--gradient-3);
+				color: white;
+				border-color: transparent;
+				box-shadow: 0 15px 35px -5px rgba(6, 182, 212, 0.4);
+			}
+
+			/* Content Section */
+			.content {
+				padding: 60px 40px;
+				min-height: 70vh;
+			}
+
+			.tab-content {
+				display: none;
+				animation: slideIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+			}
+
+			.tab-content.active {
+				display: block;
+			}
+
+			@keyframes slideIn {
+				from {
+					opacity: 0;
+					transform: translateY(30px);
+				}
+				to {
+					opacity: 1;
+					transform: translateY(0);
+				}
+			}
+
+			/* Enhanced Cards */
+			.glass-card {
+				background: rgba(255, 255, 255, 0.05);
+				backdrop-filter: blur(10px);
+				-webkit-backdrop-filter: blur(10px);
+				border: 1px solid rgba(255, 255, 255, 0.1);
+				border-radius: 20px;
+				padding: 30px;
+				margin-bottom: 30px;
+				position: relative;
+				overflow: hidden;
+				transition: all 0.4s ease;
+			}
+
+			.glass-card::before {
+				content: '';
+				position: absolute;
+				width: 150%;
+				height: 150%;
+				background: linear-gradient(
+					45deg,
+					transparent,
+					rgba(255, 255, 255, 0.1),
+					transparent
+				);
+				top: -50%;
+				left: -150%;
+				transition: left 0.6s ease;
+			}
+
+			.glass-card:hover::before {
+				left: 150%;
+			}
+
+			.glass-card:hover {
+				transform: translateY(-5px);
+				box-shadow: 0 20px 40px -10px rgba(124, 58, 237, 0.3);
+				border-color: rgba(255, 255, 255, 0.2);
+			}
+
+			/* Code Blocks - Beautiful Syntax Highlighting */
+			.code-container {
+				position: relative;
+				margin: 25px 0;
+				border-radius: 15px;
+				overflow: hidden;
+				background: var(--code-bg);
+				box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.5);
+				transition: all 0.3s ease;
+			}
+
+			.code-container:hover {
+				transform: translateY(-2px);
+				box-shadow: 0 25px 60px -15px rgba(124, 58, 237, 0.4);
+			}
+
+			.code-header {
+				background: linear-gradient(
+					90deg,
+					var(--primary-dark),
+					var(--accent)
+				);
+				padding: 12px 20px;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+			}
+
+			.code-lang {
+				color: white;
+				font-weight: 600;
+				font-size: 0.9em;
+				text-transform: uppercase;
+				letter-spacing: 1px;
+			}
+
+			.code-actions {
+				display: flex;
+				gap: 8px;
+			}
+
+			.code-dot {
+				width: 12px;
+				height: 12px;
+				border-radius: 50%;
+				background: rgba(255, 255, 255, 0.3);
+			}
+
+			.code-dot:nth-child(1) {
+				background: #ff5f57;
+			}
+			.code-dot:nth-child(2) {
+				background: #ffbd2e;
+			}
+			.code-dot:nth-child(3) {
+				background: #28ca42;
+			}
+
+			pre {
+				margin: 0;
+				padding: 25px;
+				overflow-x: auto;
+				font-family: 'JetBrains Mono', monospace;
+				font-size: 14px;
+				line-height: 1.7;
+				color: var(--code-text);
+			}
+
+			pre::-webkit-scrollbar {
+				height: 8px;
+			}
+
+			pre::-webkit-scrollbar-track {
+				background: rgba(0, 0, 0, 0.2);
+			}
+
+			pre::-webkit-scrollbar-thumb {
+				background: var(--primary);
+				border-radius: 4px;
+			}
+
+			.keyword {
+				color: var(--code-keyword);
+				font-weight: 600;
+			}
+			.string {
+				color: var(--code-string);
+			}
+			.function {
+				color: var(--code-function);
+			}
+			.comment {
+				color: var(--code-comment);
+				font-style: italic;
+			}
+			.number {
+				color: var(--code-number);
+			}
+			.operator {
+				color: #89ddff;
+			}
+			.class-name {
+				color: #f9e2af;
+			}
+			.property {
+				color: #94e2d5;
+			}
+			.decorator {
+				color: var(--code-decorator);
+			}
+
+			/* Feature Cards */
+			.feature-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+				gap: 25px;
+				margin: 40px 0;
+			}
+
+			.feature-card {
+				background: linear-gradient(
+					135deg,
+					rgba(124, 58, 237, 0.1),
+					rgba(6, 182, 212, 0.1)
+				);
+				backdrop-filter: blur(10px);
+				border: 1px solid rgba(255, 255, 255, 0.1);
+				border-radius: 20px;
+				padding: 25px;
+				position: relative;
+				overflow: hidden;
+				transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+				isolation: isolate;
+			}
+
+			.feature-card::before {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				background: var(--gradient-3);
+				opacity: 0;
+				transition: opacity 0.4s ease;
+				z-index: -1;
+			}
+
+			.feature-card:hover {
+				transform: translateY(-8px) scale(1.02);
+				box-shadow: 0 20px 40px -10px rgba(124, 58, 237, 0.4);
+				border-color: rgba(255, 255, 255, 0.3);
+			}
+
+			.feature-card:hover::before {
+				opacity: 0.1;
+			}
+
+			.feature-icon {
+				font-size: 2.5em;
+				margin-bottom: 15px;
+				display: block;
+				animation: bounce 2s infinite;
+			}
+
+			@keyframes bounce {
+				0%,
+				100% {
+					transform: translateY(0);
+				}
+				50% {
+					transform: translateY(-10px);
+				}
+			}
+
+			.feature-title {
+				font-size: 1.3em;
+				font-weight: 700;
+				color: white;
+				margin-bottom: 10px;
+			}
+
+			.feature-desc {
+				color: rgba(255, 255, 255, 0.7);
+				line-height: 1.6;
+			}
+
+			/* Flow Diagram */
+			.flow-diagram {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				gap: 20px;
+				padding: 40px 20px;
+				margin: 30px 0;
+				flex-wrap: wrap;
+			}
+
+			.flow-step {
+				padding: 15px 30px;
+				background: var(--gradient-3);
+				color: white;
+				border-radius: 50px;
+				font-weight: 700;
+				position: relative;
+				box-shadow: 0 10px 30px -5px rgba(6, 182, 212, 0.4);
+				animation: flowPulse 2s infinite;
+				animation-delay: calc(var(--i) * 0.2s);
+				transition: all 0.3s ease;
+			}
+
+			.flow-step:hover {
+				transform: scale(1.1) rotate(-2deg);
+			}
+
+			@keyframes flowPulse {
+				0%,
+				100% {
+					transform: scale(1);
+				}
+				50% {
+					transform: scale(1.05);
+				}
+			}
+
+			.flow-arrow {
+				font-size: 2em;
+				color: var(--accent-light);
+				animation: arrowMove 1.5s infinite;
+			}
+
+			@keyframes arrowMove {
+				0%,
+				100% {
+					transform: translateX(0);
+				}
+				50% {
+					transform: translateX(10px);
+				}
+			}
+
+			/* Alert Boxes */
+			.alert {
+				padding: 20px;
+				border-radius: 15px;
+				margin: 25px 0;
+				position: relative;
+				overflow: hidden;
+				border: 1px solid;
+				animation: slideIn 0.5s ease;
+			}
+
+			.alert::before {
+				content: '';
+				position: absolute;
+				width: 4px;
+				height: 100%;
+				left: 0;
+				top: 0;
+			}
+
+			.alert-success {
+				background: rgba(16, 185, 129, 0.1);
+				border-color: rgba(16, 185, 129, 0.3);
+				color: #10b981;
+			}
+
+			.alert-success::before {
+				background: var(--success);
+			}
+
+			.alert-warning {
+				background: rgba(245, 158, 11, 0.1);
+				border-color: rgba(245, 158, 11, 0.3);
+				color: #f59e0b;
+			}
+
+			.alert-warning::before {
+				background: var(--warning);
+			}
+
+			.alert-danger {
+				background: rgba(239, 68, 68, 0.1);
+				border-color: rgba(239, 68, 68, 0.3);
+				color: #ef4444;
+			}
+
+			.alert-danger::before {
+				background: var(--danger);
+			}
+
+			.alert-title {
+				font-weight: 700;
+				margin-bottom: 8px;
+				display: flex;
+				align-items: center;
+				gap: 10px;
+			}
+
+			/* Method Cards */
+			.method-card {
+				background: rgba(255, 255, 255, 0.03);
+				border: 1px solid rgba(255, 255, 255, 0.1);
+				border-radius: 20px;
+				padding: 30px;
+				margin: 30px 0;
+				position: relative;
+				overflow: hidden;
+				transition: all 0.4s ease;
+			}
+
+			.method-card::after {
+				content: '';
+				position: absolute;
+				width: 200px;
+				height: 200px;
+				background: var(--gradient-4);
+				border-radius: 50%;
+				top: -100px;
+				right: -100px;
+				opacity: 0.1;
+				transition: all 0.4s ease;
+			}
+
+			.method-card:hover::after {
+				transform: scale(1.5);
+				opacity: 0.2;
+			}
+
+			.method-card:hover {
+				transform: translateX(10px);
+				border-color: rgba(255, 255, 255, 0.2);
+				box-shadow: 0 20px 40px -10px rgba(124, 58, 237, 0.3);
+			}
+
+			.method-header {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				margin-bottom: 20px;
+			}
+
+			.method-name {
+				font-size: 1.5em;
+				font-weight: 700;
+				background: var(--gradient-3);
+				-webkit-background-clip: text;
+				-webkit-text-fill-color: transparent;
+				background-clip: text;
+			}
+
+			.method-badge {
+				padding: 6px 16px;
+				background: var(--gradient-3);
+				color: white;
+				border-radius: 25px;
+				font-size: 0.85em;
+				font-weight: 700;
+				text-transform: uppercase;
+				letter-spacing: 1px;
+				box-shadow: 0 5px 15px -3px rgba(6, 182, 212, 0.4);
+			}
+
+			.method-desc {
+				color: rgba(255, 255, 255, 0.7);
+				margin-bottom: 20px;
+				line-height: 1.6;
+			}
+
+			/* Scrollbar Styling */
+			::-webkit-scrollbar {
+				width: 12px;
+			}
+
+			::-webkit-scrollbar-track {
+				background: rgba(0, 0, 0, 0.2);
+			}
+
+			::-webkit-scrollbar-thumb {
+				background: var(--gradient-3);
+				border-radius: 6px;
+			}
+
+			::-webkit-scrollbar-thumb:hover {
+				background: var(--gradient-1);
+			}
+
+			/* Section Headers */
+			h2 {
+				font-size: 2.5em;
+				font-weight: 800;
+				margin-bottom: 30px;
+				background: linear-gradient(135deg, #fff, var(--accent-light));
+				-webkit-background-clip: text;
+				-webkit-text-fill-color: transparent;
+				background-clip: text;
+			}
+
+			h3 {
+				font-size: 1.8em;
+				font-weight: 700;
+				margin: 30px 0 20px;
+				color: white;
+			}
+
+			/* Responsive */
+			@media (max-width: 768px) {
+				h1 {
+					font-size: 2.5em;
+				}
+
+				.content {
+					padding: 40px 20px;
+				}
+
+				.header {
+					padding: 40px 20px 30px;
+				}
+
+				.feature-grid {
+					grid-template-columns: 1fr;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div
+			class="floating-particles"
+			id="particles"></div>
+
+		<div class="container">
+			<header class="header">
+				<h1>FetchService</h1>
+				<p class="subtitle"
+					>Our in-house data management solution for SEKOIA</p
+				>
+
+				<div class="nav-tabs">
+					<div
+						class="nav-tab active"
+						onclick="showTab('quickstart')"
+						>🚀 Quick Start</div
+					>
+					<div
+						class="nav-tab"
+						onclick="showTab('architecture')"
+						>🏗️ Architecture</div
+					>
+					<div
+						class="nav-tab"
+						onclick="showTab('scenarios')"
+						>💡 Scenarios</div
+					>
+					<div
+						class="nav-tab"
+						onclick="showTab('methods')"
+						>⚡ Methods</div
+					>
+					<div
+						class="nav-tab"
+						onclick="showTab('infinite')"
+						>♾️ Infinite</div
+					>
+					<div
+						class="nav-tab"
+						onclick="showTab('advanced')"
+						>🎯 Advanced</div
+					>
+					<div
+						class="nav-tab"
+						onclick="showTab('reference')"
+						>📚 Reference</div
+					>
+				</div>
+			</header>
+
+			<div class="content">
+				<!-- Quick Start -->
+				<div
+					id="quickstart"
+					class="tab-content active">
+					<h2>Quick Start Guide</h2>
+
+					<div class="glass-card">
+						<h3>The Essential Pattern</h3>
+						<p
+							style="
+								color: rgba(255, 255, 255, 0.8);
+								margin-bottom: 30px;
+							">
+							FetchService is our service to manage data between
+							Angular and REST APIs. One service to rule them all!
+						</p>
+
+						<div class="flow-diagram">
+							<span
+								class="flow-step"
+								style="--i: 0"
+								>Create Store</span
+							>
+							<span class="flow-arrow">→</span>
+							<span
+								class="flow-step"
+								style="--i: 1"
+								>Fetch Data</span
+							>
+							<span class="flow-arrow">→</span>
+							<span
+								class="flow-step"
+								style="--i: 2"
+								>Subscribe</span
+							>
+							<span class="flow-arrow">→</span>
+							<span
+								class="flow-step"
+								style="--i: 3"
+								>Display</span
+							>
+						</div>
+					</div>
+
+					<div class="glass-card">
+						<h3>Your First Implementation</h3>
+
+						<div class="code-container">
+							<div class="code-header">
+								<span class="code-lang"
+									>TypeScript - Component</span
+								>
+								<div class="code-actions">
+									<span class="code-dot"></span>
+									<span class="code-dot"></span>
+									<span class="code-dot"></span>
+								</div>
+							</div>
+							<pre><code><span class="keyword">import</span> { Component, signal, inject } <span class="keyword">from</span> <span class="string">'@angular/core'</span>;
+<span class="keyword">import</span> { toSignal } <span class="keyword">from</span> <span class="string">'@angular/core/rxjs-interop'</span>;
+
+<span class="decorator">@Component</span>({
+  <span class="property">selector</span>: <span class="string">'app-users'</span>,
+  <span class="property">templateUrl</span>: <span class="string">'./users.component.html'</span>
+})
+<span class="keyword">export class</span> <span class="class-name">UsersComponent</span> {
+  <span class="keyword">private</span> fetchService = inject(FetchService);
+  
+  <span class="comment">// Using signals for reactive state</span>
+  users = toSignal(<span class="keyword">this</span>.fetchService.getItems&lt;<span class="class-name">User</span>&gt;(<span class="string">'USERS'</span>), {
+    <span class="property">initialValue</span>: []
+  });
+  
+  loading = toSignal(<span class="keyword">this</span>.fetchService.getLoading(<span class="string">'USERS'</span>));
+  error = toSignal(<span class="keyword">this</span>.fetchService.getErrors(<span class="string">'USERS'</span>));
+  
+  <span class="keyword">constructor</span>() {
+    <span class="comment">// Step 1: Create the store</span>
+    <span class="keyword">this</span>.fetchService.createStore(<span class="string">'USERS'</span>, {
+      <span class="property">url</span>: <span class="string">'/api/v1/users'</span>,
+      <span class="property">fieldId</span>: <span class="string">'uuid'</span>
+    });
+    
+    <span class="comment">// Step 2: Fetch the data</span>
+    <span class="keyword">this</span>.fetchService.fetchItems(<span class="string">'USERS'</span>);
+  }
+}</code></pre>
+						</div>
+
+						<div class="code-container">
+							<div class="code-header">
+								<span class="code-lang"
+									>HTML - Template</span
+								>
+								<div class="code-actions">
+									<span class="code-dot"></span>
+									<span class="code-dot"></span>
+									<span class="code-dot"></span>
+								</div>
+							</div>
+							<pre><code><span class="comment">&lt;!-- Using new control flow syntax --&gt;</span>
+<span class="decorator">@if</span> (loading()) {
+  &lt;<span class="keyword">div</span> <span class="property">class</span>=<span class="string">"loading"</span>&gt;Loading users...&lt;/<span class="keyword">div</span>&gt;
+}
+
+<span class="decorator">@for</span> (user <span class="keyword">of</span> users(); track user.uuid) {
+  &lt;<span class="keyword">div</span> <span class="property">class</span>=<span class="string">"user-card"</span>&gt;
+    {{ user.name }} - {{ user.email }}
+  &lt;/<span class="keyword">div</span>&gt;
+} <span class="decorator">@empty</span> {
+  &lt;<span class="keyword">p</span>&gt;No users found&lt;/<span class="keyword">p</span>&gt;
+}
+
+<span class="decorator">@if</span> (error()) {
+  &lt;<span class="keyword">div</span> <span class="property">class</span>=<span class="string">"error"</span>&gt;
+    Error: {{ error().message }}
+  &lt;/<span class="keyword">div</span>&gt;
+}</code></pre>
+						</div>
+					</div>
+
+					<div class="alert alert-success">
+						<div class="alert-title">✨ Pro Tip</div>
+						Using signals with toSignal() provides automatic
+						subscription management and better performance with
+						Angular's change detection!
+					</div>
+				</div>
+
+				<!-- Architecture -->
+				<div
+					id="architecture"
+					class="tab-content">
+					<h2>Architecture Deep Dive</h2>
+
+					<div class="glass-card">
+						<h3>Store Anatomy</h3>
+						<p
+							style="
+								color: rgba(255, 255, 255, 0.8);
+								margin-bottom: 30px;
+							">
+							Each resource gets a complete state management unit
+							containing everything about that resource.
+						</p>
+
+						<div class="feature-grid">
+							<div class="feature-card">
+								<span class="feature-icon">📦</span>
+								<div class="feature-title">_items</div>
+								<div class="feature-desc">
+									BehaviorSubject&lt;string[]&gt;<br />
+									Array of IDs maintaining API order
+								</div>
+							</div>
+
+							<div class="feature-card">
+								<span class="feature-icon">🗂️</span>
+								<div class="feature-title">detail</div>
+								<div class="feature-desc">
+									{ [id]: BehaviorSubject&lt;T&gt; }<br />
+									Full objects with real-time updates
+								</div>
+							</div>
+
+							<div class="feature-card">
+								<span class="feature-icon">🔄</span>
+								<div class="feature-title">loading</div>
+								<div class="feature-desc">
+									BehaviorSubject&lt;boolean&gt;<br />
+									Track read operation status
+								</div>
+							</div>
+
+							<div class="feature-card">
+								<span class="feature-icon">✍️</span>
+								<div class="feature-title">writeLoading</div>
+								<div class="feature-desc">
+									BehaviorSubject&lt;boolean&gt;<br />
+									Track write operation status
+								</div>
+							</div>
+
+							<div class="feature-card">
+								<span class="feature-icon">🔍</span>
+								<div class="feature-title">filters</div>
+								<div class="feature-desc">
+									BehaviorSubject&lt;FilterItems&gt;<br />
+									Active filters and sorting
+								</div>
+							</div>
+
+							<div class="feature-card">
+								<span class="feature-icon">📄</span>
+								<div class="feature-title">pagination</div>
+								<div class="feature-desc">
+									BehaviorSubject&lt;PaginatorConfig&gt;<br />
+									Page control and navigation
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="glass-card">
+						<h3>How It All Connects</h3>
+
+						<div class="code-container">
+							<div class="code-header">
+								<span class="code-lang"
+									>TypeScript - Store Structure</span
+								>
+								<div class="code-actions">
+									<span class="code-dot"></span>
+									<span class="code-dot"></span>
+									<span class="code-dot"></span>
+								</div>
+							</div>
+							<pre><code><span class="comment">// Internal store structure for each resource</span>
+<span class="keyword">interface</span> <span class="class-name">FetchStore</span>&lt;T&gt; {
+  <span class="comment">// Data storage</span>
+  <span class="property">_items</span>: BehaviorSubject&lt;<span class="keyword">string</span>[]&gt;;        <span class="comment">// ['id1', 'id2', ...]</span>
+  <span class="property">detail</span>: { [id: <span class="keyword">string</span>]: BehaviorSubject&lt;T&gt; }; <span class="comment">// Full objects</span>
+  <span class="property">items</span>: Observable&lt;T[]&gt;;                    <span class="comment">// Computed from above</span>
+  
+  <span class="comment">// State management</span>
+  <span class="property">loading</span>: BehaviorSubject&lt;<span class="keyword">boolean</span>&gt;;
+  <span class="property">writeLoading</span>: BehaviorSubject&lt;<span class="keyword">boolean</span>&gt;;
+  <span class="property">error</span>: BehaviorSubject&lt;ErrorResponse | <span class="keyword">null</span>&gt;;
+  
+  <span class="comment">// Configuration</span>
+  <span class="property">url</span>: <span class="keyword">string</span>;
+  <span class="property">primaryKey</span>: <span class="keyword">string</span>;
+  <span class="property">fetchMode</span>: FetchMode;
+}</code></pre>
+						</div>
+					</div>
+
+					<div class="alert alert-warning">
+						<div class="alert-title">💡 Key Insight</div>
+						The separation of IDs and objects prevents duplication
+						and ensures consistency. Update once, see changes
+						everywhere!
+					</div>
+				</div>
+
+				<!-- Scenarios -->
+				<div
+					id="scenarios"
+					class="tab-content">
+					<h2>Real-World Scenarios</h2>
+
+					<div class="method-card">
+						<div class="method-header">
+							<span class="method-name">Search with Signals</span>
+							<span class="method-badge">Pattern</span>
+						</div>
+						<p class="method-desc"
+							>Modern reactive search using Angular signals</p
+						>
+
+						<div class="code-container">
+							<div class="code-header">
+								<span class="code-lang"
+									>TypeScript - Signal-based Search</span
+								>
+								<div class="code-actions">
+									<span class="code-dot"></span>
+									<span class="code-dot"></span>
+									<span class="code-dot"></span>
+								</div>
+							</div>
+							<pre><code><span class="keyword">import</span> { Component, signal, effect } <span class="keyword">from</span> <span class="string">'@angular/core'</span>;
+<span class="keyword">import</span> { debounceTime } <span class="keyword">from</span> <span class="string">'rxjs'</span>;
+
+<span class="decorator">@Component</span>({...})
+<span class="keyword">export class</span> <span class="class-name">SearchComponent</span> {
+  searchTerm = signal(<span class="string">''</span>);
+  <span class="keyword">private</span> fetchService = inject(FetchService);
+  
+  <span class="keyword">constructor</span>() {
+    <span class="comment">// React to search changes with debounce</span>
+    effect(() => {
+      <span class="keyword">const</span> term = <span class="keyword">this</span>.searchTerm();
+      
+      <span class="comment">// Debounce is handled via RxJS operator</span>
+      setTimeout(() => {
+        <span class="keyword">this</span>.fetchService.addFilter(<span class="string">'PRODUCTS'</span>, {
+          <span class="property">name</span>: <span class="string">'search'</span>,
+          <span class="property">value</span>: term,
+          <span class="property">type</span>: SearchType.Contains
+        }, <span class="keyword">true</span>);
+      }, <span class="number">300</span>);
+    });
+  }
+  
+  onSearch(term: <span class="keyword">string</span>) {
+    <span class="keyword">this</span>.searchTerm.set(term);
+  }
+}</code></pre>
+						</div>
+					</div>
+
+					<div class="method-card">
+						<div class="method-header">
+							<span class="method-name"
+								>Master-Detail with Signals</span
+							>
+							<span class="method-badge">Pattern</span>
+						</div>
+						<p class="method-desc"
+							>Efficient data sharing between list and detail
+							views</p
+						>
+
+						<div class="code-container">
+							<div class="code-header">
+								<span class="code-lang"
+									>TypeScript - List Component</span
+								>
+								<div class="code-actions">
+									<span class="code-dot"></span>
+									<span class="code-dot"></span>
+									<span class="code-dot"></span>
+								</div>
+							</div>
+							<pre><code><span class="decorator">@Component</span>({
+  <span class="property">template</span>: <span class="string">`
+    @for (user of users(); track user.uuid) {
+      &lt;div (click)="selectUser(user.uuid)"&gt;
+        {{ user.name }}
+      &lt;/div&gt;
+    }
+  `</span>
+})
+<span class="keyword">export class</span> <span class="class-name">UserListComponent</span> {
+  <span class="keyword">private</span> fetchService = inject(FetchService);
+  users = toSignal(<span class="keyword">this</span>.fetchService.getItems&lt;<span class="class-name">User</span>&gt;(<span class="string">'USERS'</span>));
+  
+  selectUser(userId: <span class="keyword">string</span>) {
+    <span class="comment">// Navigate to detail - data already cached!</span>
+    <span class="keyword">this</span>.router.navigate([<span class="string">'/users'</span>, userId]);
+  }
+}</code></pre>
+						</div>
+
+						<div class="code-container">
+							<div class="code-header">
+								<span class="code-lang"
+									>TypeScript - Detail Component</span
+								>
+								<div class="code-actions">
+									<span class="code-dot"></span>
+									<span class="code-dot"></span>
+									<span class="code-dot"></span>
+								</div>
+							</div>
+							<pre><code><span class="decorator">@Component</span>({...})
+<span class="keyword">export class</span> <span class="class-name">UserDetailComponent</span> {
+  <span class="keyword">private</span> fetchService = inject(FetchService);
+  <span class="keyword">private</span> route = inject(ActivatedRoute);
+  
+  user = signal&lt;<span class="class-name">User</span> | <span class="keyword">null</span>&gt;(<span class="keyword">null</span>);
+  
+  <span class="keyword">ngOnInit</span>() {
+    <span class="keyword">const</span> userId = <span class="keyword">this</span>.route.snapshot.params[<span class="string">'id'</span>];
+    
+    <span class="comment">// Try cache first, fetch only if needed</span>
+    <span class="keyword">this</span>.fetchService.fetchItem(<span class="string">'USERS'</span>, userId, <span class="keyword">false</span>);
+    
+    <span class="comment">// Convert to signal for reactive updates</span>
+    <span class="keyword">this</span>.fetchService.getItem&lt;<span class="class-name">User</span>&gt;(<span class="string">'USERS'</span>, userId)
+      .subscribe(user => <span class="keyword">this</span>.user.set(user));
+  }
+}</code></pre>
+						</div>
+					</div>
+
+					<div class="method-card">
+						<div class="method-header">
+							<span class="method-name">Real-time Updates</span>
+							<span class="method-badge">Pattern</span>
+						</div>
+						<p class="method-desc"
+							>Update in one component, see changes everywhere</p
+						>
+
+						<div class="code-container">
+							<div class="code-header">
+								<span class="code-lang"
+									>TypeScript - Auto-sync Components</span
+								>
+								<div class="code-actions">
+									<span class="code-dot"></span>
+									<span class="code-dot"></span>
+									<span class="code-dot"></span>
+								</div>
+							</div>
+							<pre><code><span class="comment">// Component A: Edit Form</span>
+<span class="decorator">@Component</span>({...})
+<span class="keyword">export class</span> <span class="class-name">EditUserComponent</span> {
+  <span class="keyword">private</span> fetchService = inject(FetchService);
+  
+  saveUser(userData: <span class="class-name">User</span>) {
+    <span class="keyword">this</span>.fetchService.updateItem(<span class="string">'USERS'</span>, userData);
+    <span class="comment">// That's it! No event emitters needed</span>
+  }
+}
+
+<span class="comment">// Component B: User List (auto-updates!)</span>
+<span class="decorator">@Component</span>({...})
+<span class="keyword">export class</span> <span class="class-name">UserListComponent</span> {
+  users = toSignal(<span class="keyword">this</span>.fetchService.getItems&lt;<span class="class-name">User</span>&gt;(<span class="string">'USERS'</span>));
+}
+
+<span class="comment">// Component C: User Card (also auto-updates!)</span>
+<span class="decorator">@Component</span>({...})
+<span class="keyword">export class</span> <span class="class-name">UserCardComponent</span> {
+  <span class="decorator">@Input</span>() userId!: <span class="keyword">string</span>;
+  user = computed(() => 
+    <span class="keyword">this</span>.users().find(u => u.uuid === <span class="keyword">this</span>.userId)
+  );
+}</code></pre>
+						</div>
+					</div>
+
+					<div class="alert alert-danger">
+						<div class="alert-title">⚠️ Common Pitfall</div>
+						Always create your store before any operations! Best
+						practice: Do it in the constructor or service
+						initializer.
+					</div>
+				</div>
+
+				<!-- Methods -->
+				<div
+					id="methods"
+					class="tab-content">
+					<h2>Method Reference</h2>
+
+					<div class="method-card">
+						<div class="method-header">
+							<span class="method-name">fetchItems()</span>
+							<span class="method-badge">READ</span>
+						</div>
+						<p class="method-desc"
+							>Your bread and butter - fetches a list from the
+							API</p
+						>
+
+						<div class="code-container">
+							<div class="code-header">
+								<span class="code-lang">TypeScript</span>
+								<div class="code-actions">
+									<span class="code-dot"></span>
+									<span class="code-dot"></span>
+									<span class="code-dot"></span>
+								</div>
+							</div>
+							<pre><code><span class="comment">// Basic fetch</span>
+<span class="keyword">this</span>.fetchService.fetchItems(<span class="string">'POSTS'</span>);
+
+<span class="comment">// With filters</span>
+<span class="keyword">this</span>.fetchService.fetchItems(<span class="string">'POSTS'</span>, [
+  { <span class="property">name</span>: <span class="string">'status'</span>, <span class="property">value</span>: <span class="string">'published'</span>, <span class="property">type</span>: SearchType.Exact }
+]);
+
+<span class="comment">// With URL params (for /api/teams/:teamId/posts)</span>
+<span class="keyword">this</span>.fetchService.fetchItems(<span class="string">'POSTS'</span>, [], { 
+  <span class="property">teamId</span>: <span class="string">'123'</span> 
+});</code></pre>
+						</div>
+					</div>
+
+					<div class="method-card">
+						<div class="method-header">
+							<span class="method-name">addItem()</span>
+							<span class="method-badge">CREATE</span>
+						</div>
+						<p class="method-desc"
+							>Creates a new resource via POST</p
+						>
+
+						<div class="code-container">
+							<div class="code-header">
+								<span class="code-lang">TypeScript</span>
+								<div class="code-actions">
+									<span class="code-dot"></span>
+									<span class="code-dot"></span>
+									<span class="code-dot"></span>
+								</div>
+							</div>
+							<pre><code><span class="keyword">const</span> <span class="property">newPost</span>: <span class="class-name">Post</span> = { 
+  <span class="property">title</span>: <span class="string">'Hello World'</span>, 
+  <span class="property">content</span>: <span class="string">'...'</span> 
+};
+
+<span class="keyword">this</span>.fetchService.addItem(<span class="string">'POSTS'</span>, newPost, <span class="keyword">true</span>);
+<span class="comment">// true = refresh the list after creation</span></code></pre>
+						</div>
+					</div>
+
+					<div class="method-card">
+						<div class="method-header">
+							<span class="method-name"
+								>updateItem() / patchItem()</span
+							>
+							<span class="method-badge">UPDATE</span>
+						</div>
+						<p class="method-desc"
+							>Updates existing resource via PUT or PATCH</p
+						>
+
+						<div class="code-container">
+							<div class="code-header">
+								<span class="code-lang">TypeScript</span>
+								<div class="code-actions">
+									<span class="code-dot"></span>
+									<span class="code-dot"></span>
+									<span class="code-dot"></span>
+								</div>
+							</div>
+							<pre><code><span class="comment">// Full update (PUT)</span>
+<span class="keyword">this</span>.fetchService.updateItem(<span class="string">'USERS'</span>, fullUserObject);
+
+<span class="comment">// Partial update (PATCH)</span>
+<span class="keyword">this</span>.fetchService.patchItem(<span class="string">'USERS'</span>, { 
+  <span class="property">uuid</span>: <span class="string">'123'</span>, 
+  <span class="property">status</span>: <span class="string">'active'</span> 
+});</code></pre>
+						</div>
+					</div>
+
+					<div class="method-card">
+						<div class="method-header">
+							<span class="method-name">Filtering & Sorting</span>
+							<span class="method-badge">FILTER</span>
+						</div>
+						<p class="method-desc"
+							>Manage filters, search, and sorting</p
+						>
+
+						<div class="code-container">
+							<div class="code-header">
+								<span class="code-lang">TypeScript</span>
+								<div class="code-actions">
+									<span class="code-dot"></span>
+									<span class="code-dot"></span>
+									<span class="code-dot"></span>
+								</div>
+							</div>
+							<pre><code><span class="comment">// Add filter</span>
+<span class="keyword">this</span>.fetchService.addFilter(<span class="string">'PRODUCTS'</span>, {
+  <span class="property">name</span>: <span class="string">'category'</span>,
+  <span class="property">value</span>: <span class="string">'electronics'</span>,
+  <span class="property">type</span>: SearchType.Exact
+}, <span class="keyword">true</span>);
+
+<span class="comment">// Add sorting</span>
+<span class="keyword">this</span>.fetchService.addSort(<span class="string">'USERS'</span>, {
+  <span class="property">active</span>: <span class="string">'created_at'</span>,
+  <span class="property">direction</span>: <span class="string">'desc'</span>
+}, <span class="keyword">true</span>);
+
+<span class="comment">// Clear all filters</span>
+<span class="keyword">this</span>.fetchService.clearFilters(<span class="string">'PRODUCTS'</span>, <span class="keyword">true</span>);</code></pre>
+						</div>
+					</div>
+				</div>
+
+				<!-- Infinite Scroll -->
+				<div
+					id="infinite"
+					class="tab-content">
+					<h2>Infinite Scroll Mastery</h2>
+
+					<div class="glass-card">
+						<h3>The Endless Feed Pattern</h3>
+
+						<div class="flow-diagram">
+							<span
+								class="flow-step"
+								style="--i: 0"
+								>Initial Load</span
+							>
+							<span class="flow-arrow">→</span>
+							<span
+								class="flow-step"
+								style="--i: 1"
+								>User Scrolls</span
+							>
+							<span class="flow-arrow">→</span>
+							<span
+								class="flow-step"
+								style="--i: 2"
+								>Detect Bottom</span
+							>
+							<span class="flow-arrow">→</span>
+							<span
+								class="flow-step"
+								style="--i: 3"
+								>Fetch More</span
+							>
+						</div>
+					</div>
+
+					<div class="method-card">
+						<div class="method-header">
+							<span class="method-name"
+								>Complete Implementation</span
+							>
+							<span class="method-badge">INFINITE</span>
+						</div>
+						<p class="method-desc"
+							>Full infinite scroll with Angular and
+							signals</p
+						>
+
+						<div class="code-container">
+							<div class="code-header">
+								<span class="code-lang"
+									>TypeScript - Component</span
+								>
+								<div class="code-actions">
+									<span class="code-dot"></span>
+									<span class="code-dot"></span>
+									<span class="code-dot"></span>
+								</div>
+							</div>
+							<pre><code><span class="keyword">import</span> { Component, signal, inject } <span class="keyword">from</span> <span class="string">'@angular/core'</span>;
+<span class="keyword">import</span> { toSignal } <span class="keyword">from</span> <span class="string">'@angular/core/rxjs-interop'</span>;
+
+<span class="decorator">@Component</span>({
+  <span class="property">selector</span>: <span class="string">'app-feed'</span>,
+  <span class="property">template</span>: <span class="string">`
+    &lt;div class="feed" (scroll)="onScroll($event)"&gt;
+      @for (post of posts(); track post.uuid) {
+        &lt;app-post [post]="post" /&gt;
+      }
+      
+      @if (loading()) {
+        &lt;div class="loader"&gt;Loading more...&lt;/div&gt;
+      }
+    &lt;/div&gt;
+  `</span>
+})
+<span class="keyword">export class</span> <span class="class-name">FeedComponent</span> {
+  <span class="keyword">private</span> fetchService = inject(FetchService);
+  
+  posts = toSignal(<span class="keyword">this</span>.fetchService.getItems&lt;<span class="class-name">Post</span>&gt;(<span class="string">'POSTS'</span>), {
+    <span class="property">initialValue</span>: []
+  });
+  
+  loading = toSignal(<span class="keyword">this</span>.fetchService.getLoading(<span class="string">'POSTS'</span>));
+  
+  <span class="keyword">constructor</span>() {
+    <span class="keyword">this</span>.fetchService.createStore(<span class="string">'POSTS'</span>, {
+      <span class="property">url</span>: <span class="string">'/api/v1/posts'</span>,
+      <span class="property">fetchMode</span>: FetchMode.INFINITE  <span class="comment">// ← Enable infinite mode</span>
+    });
+    
+    <span class="comment">// Load initial batch</span>
+    <span class="keyword">this</span>.fetchService.fetchItems(<span class="string">'POSTS'</span>);
+    
+    <span class="comment">// Listen for real-time updates</span>
+    <span class="keyword">this</span>.websocket.newPost$.subscribe(<span class="property">post</span> => {
+      <span class="keyword">this</span>.fetchService.infiniteAdd(<span class="string">'POSTS'</span>, post);
+    });
+  }
+
+  onScroll(event: Event) {
+    <span class="keyword">const</span> element = event.target <span class="keyword">as</span> HTMLElement;
+    <span class="keyword">const</span> atBottom = element.scrollHeight - element.scrollTop === element.clientHeight;
+    
+    <span class="keyword">if</span> (atBottom && !<span class="keyword">this</span>.loading()) {
+      <span class="keyword">this</span>.fetchService.fetchMore(<span class="string">'POSTS'</span>);
+    }
+  }
+
+  deletePost(postId: <span class="keyword">string</span>) {
+    <span class="comment">// Smart delete with backfill</span>
+    <span class="keyword">this</span>.fetchService.infiniteDelete(<span class="string">'POSTS'</span>, [postId]);
+  }
+}</code></pre>
+						</div>
+					</div>
+
+					<div class="feature-grid">
+						<div class="feature-card">
+							<span class="feature-icon">➕</span>
+							<div class="feature-title">infiniteAdd()</div>
+							<div class="feature-desc">
+								Prepends new items at the top. Perfect for
+								real-time updates and new posts.
+							</div>
+						</div>
+
+						<div class="feature-card">
+							<span class="feature-icon">🗑️</span>
+							<div class="feature-title">infiniteDelete()</div>
+							<div class="feature-desc">
+								Smart deletion with automatic backfill to
+								maintain scroll position.
+							</div>
+						</div>
+
+						<div class="feature-card">
+							<span class="feature-icon">📜</span>
+							<div class="feature-title">fetchMore()</div>
+							<div class="feature-desc">
+								Appends next page of items when user scrolls to
+								bottom.
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Advanced -->
+				<div
+					id="advanced"
+					class="tab-content">
+					<h2>Advanced Techniques</h2>
+
+					<div class="method-card">
+						<div class="method-header">
+							<span class="method-name"
+								>Multi-Store with Signals</span
+							>
+							<span class="method-badge">ADVANCED</span>
+						</div>
+						<p class="method-desc"
+							>Coordinate multiple stores using modern Angular
+							patterns</p
+						>
+
+						<div class="code-container">
+							<div class="code-header">
+								<span class="code-lang"
+									>TypeScript - Dashboard Component</span
+								>
+								<div class="code-actions">
+									<span class="code-dot"></span>
+									<span class="code-dot"></span>
+									<span class="code-dot"></span>
+								</div>
+							</div>
+							<pre><code><span class="decorator">@Component</span>({...})
+<span class="keyword">export class</span> <span class="class-name">DashboardComponent</span> {
+  <span class="keyword">private</span> fetchService = inject(FetchService);
+  
+  <span class="comment">// Convert observables to signals</span>
+  users = toSignal(<span class="keyword">this</span>.fetchService.getItems&lt;<span class="class-name">User</span>&gt;(<span class="string">'USERS'</span>), {
+    <span class="property">initialValue</span>: []
+  });
+  
+  projects = toSignal(<span class="keyword">this</span>.fetchService.getItems&lt;<span class="class-name">Project</span>&gt;(<span class="string">'PROJECTS'</span>), {
+    <span class="property">initialValue</span>: []
+  });
+  
+  tasks = toSignal(<span class="keyword">this</span>.fetchService.getItems&lt;<span class="class-name">Task</span>&gt;(<span class="string">'TASKS'</span>), {
+    <span class="property">initialValue</span>: []
+  });
+  
+  <span class="comment">// Computed signals for derived state</span>
+  stats = computed(() => ({
+    <span class="property">userCount</span>: <span class="keyword">this</span>.users().length,
+    <span class="property">activeProjects</span>: <span class="keyword">this</span>.projects().filter(p => p.status === <span class="string">'active'</span>),
+    <span class="property">pendingTasks</span>: <span class="keyword">this</span>.tasks().filter(t => !t.completed)
+  }));
+  
+  <span class="keyword">constructor</span>() {
+    <span class="comment">// Initialize all stores</span>
+    [<span class="string">'USERS'</span>, <span class="string">'PROJECTS'</span>, <span class="string">'TASKS'</span>].forEach(<span class="property">resource</span> => {
+      <span class="keyword">this</span>.fetchService.createStore(resource, {
+        <span class="property">url</span>: <span class="string">`/api/v1/${resource.toLowerCase()}`</span>
+      });
+      <span class="keyword">this</span>.fetchService.fetchItems(resource);
+    });
+  }
+}</code></pre>
+						</div>
+					</div>
+
+					<div class="method-card">
+						<div class="method-header">
+							<span class="method-name"
+								>Global Action Listeners</span
+							>
+							<span class="method-badge">ADVANCED</span>
+						</div>
+						<p class="method-desc"
+							>Listen to all CRUD operations across the app</p
+						>
+
+						<div class="code-container">
+							<div class="code-header">
+								<span class="code-lang"
+									>TypeScript - Notification Service</span
+								>
+								<div class="code-actions">
+									<span class="code-dot"></span>
+									<span class="code-dot"></span>
+									<span class="code-dot"></span>
+								</div>
+							</div>
+							<pre><code><span class="decorator">@Injectable</span>({ <span class="property">providedIn</span>: <span class="string">'root'</span> })
+<span class="keyword">export class</span> <span class="class-name">NotificationService</span> {
+  <span class="keyword">private</span> fetchService = inject(FetchService);
+  <span class="keyword">private</span> snackBar = inject(MatSnackBar);
+  
+  <span class="keyword">constructor</span>() {
+    <span class="comment">// Show success notifications</span>
+    <span class="keyword">this</span>.fetchService.added.subscribe(<span class="property">action</span> => {
+      <span class="keyword">this</span>.snackBar.open(
+        <span class="string">`New ${action.resource.toLowerCase()} created!`</span>,
+        <span class="string">'Close'</span>,
+        { <span class="property">duration</span>: <span class="number">3000</span> }
+      );
+    });
+    
+    <span class="comment">// Track analytics</span>
+    <span class="keyword">this</span>.fetchService.updated.subscribe(<span class="property">action</span> => {
+      <span class="keyword">if</span> (action.resource === <span class="string">'USERS'</span>) {
+        <span class="keyword">this</span>.analytics.track(<span class="string">'user_updated'</span>, action.item);
+      }
+    });
+    
+    <span class="comment">// Audit logging</span>
+    <span class="keyword">this</span>.fetchService.deleted.subscribe(<span class="property">action</span> => {
+      console.log(<span class="string">`[AUDIT] Deleted ${action.resource}`</span>, action.item);
+      // We could also show some notifications with our NotificationManager service
+    });
+  }
+}</code></pre>
+						</div>
+					</div>
+
+					<div class="method-card">
+						<div class="method-header">
+							<span class="method-name"
+								>Dynamic URLs & Nested Resources</span
+							>
+							<span class="method-badge">ADVANCED</span>
+						</div>
+						<p class="method-desc"
+							>Handle complex nested resource structures</p
+						>
+
+						<div class="code-container">
+							<div class="code-header">
+								<span class="code-lang">TypeScript</span>
+								<div class="code-actions">
+									<span class="code-dot"></span>
+									<span class="code-dot"></span>
+									<span class="code-dot"></span>
+								</div>
+							</div>
+							<pre><code><span class="comment">// For API: /api/teams/:teamId/projects/:projectId/tasks</span>
+<span class="keyword">this</span>.fetchService.createStore(<span class="string">'TEAM_PROJECT_TASKS'</span>, {
+  <span class="property">url</span>: <span class="string">'/api/teams/:teamId/projects/:projectId/tasks'</span>
+});
+
+<span class="comment">// Use with dynamic params</span>
+<span class="keyword">this</span>.fetchService.fetchItems(<span class="string">'TEAM_PROJECT_TASKS'</span>, [], {
+  <span class="property">teamId</span>: <span class="string">'team-123'</span>,
+  <span class="property">projectId</span>: <span class="string">'proj-456'</span>
+});
+
+<span class="comment">// Works with all CRUD operations</span>
+<span class="keyword">this</span>.fetchService.addItem(<span class="string">'TEAM_PROJECT_TASKS'</span>, newTask, <span class="keyword">false</span>, {
+  <span class="property">teamId</span>: <span class="string">'team-123'</span>,
+  <span class="property">projectId</span>: <span class="string">'proj-456'</span>
+});</code></pre>
+						</div>
+					</div>
+
+					<div class="alert alert-danger">
+						<div class="alert-title">💾 Memory Management</div>
+						Always clean up subscriptions in ngOnDestroy to prevent
+						memory leaks! Use takeUntilDestroyed() operator or manual unsubscribe.
+					</div>
+				</div>
+
+				<!-- Reference -->
+				<div
+					id="reference"
+					class="tab-content">
+					<h2>Quick Reference</h2>
+
+					<div class="glass-card">
+						<h3>Common Patterns</h3>
+
+						<div class="feature-grid">
+							<div class="feature-card">
+								<div class="feature-title"
+									>Basic List with Signals</div
+								>
+								<div class="code-container">
+									<div class="code-header">
+										<span class="code-lang"
+											>TypeScript</span
+										>
+										<div class="code-actions">
+											<span class="code-dot"></span>
+											<span class="code-dot"></span>
+											<span class="code-dot"></span>
+										</div>
+									</div>
+									<pre><code><span class="comment">// Component</span>
+users = toSignal(
+  <span class="keyword">this</span>.fetchService.getItems(<span class="string">'USERS'</span>)
+);
+
+<span class="comment">// Template</span>
+<span class="decorator">@for</span> (user <span class="keyword">of</span> users(); track user.id) {
+  &lt;div&gt;{{ user.name }}&lt;/div&gt;
+}</code></pre>
+								</div>
+							</div>
+
+							<div class="feature-card">
+								<div class="feature-title">Loading States</div>
+								<div class="code-container">
+									<div class="code-header">
+										<span class="code-lang"
+											>TypeScript</span
+										>
+										<div class="code-actions">
+											<span class="code-dot"></span>
+											<span class="code-dot"></span>
+											<span class="code-dot"></span>
+										</div>
+									</div>
+									<pre><code>loading = toSignal(
+  <span class="keyword">this</span>.fetchService.getLoading(<span class="string">'USERS'</span>)
+);
+
+<span class="decorator">@if</span> (loading()) {
+  &lt;mat-spinner /&gt;
+} <span class="decorator">@else</span> {
+  <span class="comment">// Show content</span>
+}</code></pre>
+								</div>
+							</div>
+
+							<div class="feature-card">
+								<div class="feature-title">Error Handling</div>
+								<div class="code-container">
+									<div class="code-header">
+										<span class="code-lang"
+											>TypeScript</span
+										>
+										<div class="code-actions">
+											<span class="code-dot"></span>
+											<span class="code-dot"></span>
+											<span class="code-dot"></span>
+										</div>
+									</div>
+									<pre><code>error = toSignal(
+  <span class="keyword">this</span>.fetchService.getErrors(<span class="string">'USERS'</span>)
+);
+
+<span class="decorator">@if</span> (error()) {
+  &lt;mat-error&gt;
+    {{ error().message }}
+  &lt;/mat-error&gt;
+}</code></pre>
+								</div>
+							</div>
+
+							<div class="feature-card">
+								<div class="feature-title">Pagination</div>
+								<div class="code-container">
+									<div class="code-header">
+										<span class="code-lang"
+											>TypeScript</span
+										>
+										<div class="code-actions">
+											<span class="code-dot"></span>
+											<span class="code-dot"></span>
+											<span class="code-dot"></span>
+										</div>
+									</div>
+									<pre><code><span class="keyword">this</span>.fetchService.changePagination(
+  <span class="string">'USERS'</span>, 
+  {
+    <span class="property">indexPage</span>: <span class="number">2</span>,
+    <span class="property">sizePage</span>: <span class="number">25</span>
+  }
+);</code></pre>
+								</div>
+							</div>
+
+							<div class="feature-card">
+								<div class="feature-title">Search Filter</div>
+								<div class="code-container">
+									<div class="code-header">
+										<span class="code-lang"
+											>TypeScript</span
+										>
+										<div class="code-actions">
+											<span class="code-dot"></span>
+											<span class="code-dot"></span>
+											<span class="code-dot"></span>
+										</div>
+									</div>
+									<pre><code><span class="keyword">this</span>.fetchService.addFilter(
+  <span class="string">'PRODUCTS'</span>, 
+  {
+    <span class="property">name</span>: <span class="string">'search'</span>,
+    <span class="property">value</span>: searchTerm,
+    <span class="property">type</span>: SearchType.Contains
+  }, 
+  <span class="keyword">true</span> <span class="comment">// auto-fetch</span>
+);</code></pre>
+								</div>
+							</div>
+
+							<div class="feature-card">
+								<div class="feature-title">CRUD Operations</div>
+								<div class="code-container">
+									<div class="code-header">
+										<span class="code-lang"
+											>TypeScript</span
+										>
+										<div class="code-actions">
+											<span class="code-dot"></span>
+											<span class="code-dot"></span>
+											<span class="code-dot"></span>
+										</div>
+									</div>
+									<pre><code><span class="comment">// Create</span>
+<span class="keyword">this</span>.fetchService.addItem(<span class="string">'USERS'</span>, data);
+
+<span class="comment">// Update</span>
+<span class="keyword">this</span>.fetchService.updateItem(<span class="string">'USERS'</span>, data);
+
+<span class="comment">// Delete</span>
+<span class="keyword">this</span>.fetchService.removeItem(<span class="string">'USERS'</span>, id);</code></pre>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="glass-card">
+						<h3>Store Configuration Options</h3>
+
+						<div class="feature-grid">
+							<div class="feature-card">
+								<span class="feature-icon">🔗</span>
+								<div class="feature-title">url</div>
+								<div class="feature-desc">
+									<strong>Required</strong><br />
+									API endpoint with :param support
+								</div>
+							</div>
+
+							<div class="feature-card">
+								<span class="feature-icon">🔑</span>
+								<div class="feature-title">fieldId</div>
+								<div class="feature-desc">
+									<strong>Default: 'uuid'</strong><br />
+									Primary key field name - sometimes the backend sends data with a different key .
+								</div>
+							</div>
+
+							<div class="feature-card">
+								<span class="feature-icon">📊</span>
+								<div class="feature-title">fetchMode</div>
+								<div class="feature-desc">
+									<strong>PAGINATION | INFINITE</strong><br />
+									How items are loaded
+								</div>
+							</div>
+
+							<div class="feature-card">
+								<span class="feature-icon">📦</span>
+								<div class="feature-title">wrapperKey</div>
+								<div class="feature-desc">
+									<strong>Optional</strong><br />
+									For wrapped API responses
+								</div>
+							</div>
+
+							<div class="feature-card">
+								<span class="feature-icon">🚫</span>
+								<div class="feature-title"
+									>cancelSubscription</div
+								>
+								<div class="feature-desc">
+									<strong>Boolean</strong><br />
+									Auto-cancel pending requests
+								</div>
+							</div>
+
+							<div class="feature-card">
+								<span class="feature-icon">📄</span>
+								<div class="feature-title">noPaginator</div>
+								<div class="feature-desc">
+									<strong>Boolean</strong><br />
+									Disable pagination params
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="alert alert-success">
+						<div class="alert-title">🚀 Performance Tips</div>
+						• Use signals for better change detection performance<br />
+						• Enable cancelSubscription for search operations<br />
+						• Leverage cache with fetchItem(resource, id, false)<br />
+						• Use computed() for derived state instead of pipes<br />
+						• Apply trackBy in @for loops for optimal rendering
+					</div>
+
+					<div class="alert alert-warning">
+						<div class="alert-title">⚠️ Migration Notes</div>
+						• Use signals instead of BehaviorSubjects in
+						components<br />
+						• Use inject() instead of constructor injection<br />
+						• Apply takeUntilDestroyed() for auto-unsubscribe
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			// Tab switching
+			function showTab(tabName) {
+				document.querySelectorAll('.tab-content').forEach((tab) => {
+					tab.classList.remove('active');
+				});
+
+				document.querySelectorAll('.nav-tab').forEach((navTab) => {
+					navTab.classList.remove('active');
+				});
+
+				document.getElementById(tabName).classList.add('active');
+				event.target.classList.add('active');
+			}
+
+			// Generate floating particles
+			const particlesContainer = document.getElementById('particles');
+			for (let i = 0; i < 50; i++) {
+				const particle = document.createElement('div');
+				particle.className = 'particle';
+				particle.style.left = Math.random() * 100 + '%';
+				particle.style.animationDelay = Math.random() * 15 + 's';
+				particle.style.animationDuration =
+					15 + Math.random() * 10 + 's';
+				particlesContainer.appendChild(particle);
+			}
+
+			// Copy to clipboard functionality
+			document
+				.querySelectorAll('.code-container')
+				.forEach((container) => {
+					container.style.cursor = 'pointer';
+					container.title = 'Click to copy';
+
+					container.addEventListener('click', function () {
+						const codeText =
+							this.querySelector('pre code').textContent;
+						navigator.clipboard.writeText(codeText).then(() => {
+							// Visual feedback
+							const header = this.querySelector('.code-header');
+							const originalBg = header.style.background;
+							header.style.background =
+								'linear-gradient(90deg, #10b981, #059669)';
+
+							const lang = this.querySelector('.code-lang');
+							const originalText = lang.textContent;
+							lang.textContent = '✓ Copied!';
+
+							setTimeout(() => {
+								header.style.background = originalBg;
+								lang.textContent = originalText;
+							}, 1000);
+						});
+					});
+				});
+		</script>
+	</body>
+</html>
